@@ -1601,6 +1601,16 @@ class VoltProcedure:
         self.fser.prependLength() # prepend the total length of the invocation
         self.fser.flush()
 
+    # If you're coding in an async framework like Tornado you should separate the invocations
+    # of call and read. Use Tornado's ioloop to monitor the VoltDB socket by adding a handler...
+    #     def Init( self):
+    #         self.volt_client = VoltDBCluster( hosts).connect( )
+    #     def OnVoltResponse( self, fd, events):
+    #         vresp = self.volt_proc.read( )
+    #     def DispatchQuery( self, q, types):
+    #         self.volt_proc = VoltProcedure( self.volt_client, q, types)
+    #     loop.add_handler( volt_client.socket.fileno( ), self.OnVoltResponse, loop.READ)
+    def read( self, params=None, response=True, timeout=None):
         # The timeout in effect for the procedure call is the timeout argument
         # if not None or self.procedure_timeout. Exceeding that time will raise
         # a timeout exception. Restores the original timeout value when done.
