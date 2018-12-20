@@ -28,6 +28,7 @@ import hashlib
 import re
 import math
 import os
+import time
 try:
     import ssl
     ssl_available = True
@@ -888,7 +889,7 @@ class FastSerializer:
         if value is None:
             val = self.__class__.NULL_BIGINT_INDICATOR
         else:
-            seconds = int(value.strftime("%s"))
+            seconds = time.mktime( value.timetuple( ))
             val = seconds * 1000000 + value.microsecond
         self.wbuf.extend(int64toBytes(val))
 
